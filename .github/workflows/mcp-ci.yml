@@ -1,0 +1,38 @@
+name: MCP Trigger CI
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Start MCP Server
+        run: node mcp-server/server.js &
+      
+      - name: Trigger MCP API
+        run: |
+          sleep 5
+          curl -X POST http://localhost:4000/run-tests
+
+      - name: Upload Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
