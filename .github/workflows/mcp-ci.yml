@@ -1,47 +1,71 @@
-name: MCP Test Automation
+name: Password Generator Tests
 
 on:
   push:
     branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   test:
-    timeout-minutes: 60
     runs-on: ubuntu-latest
+    timeout-minutes: 60
+
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: lts/*
-    - name: Install dependencies
-      run: npm ci
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
-    
-    - name: Start MCP Server
-      run: |
-        node mcp-server/server.js &
-        sleep 3
-      env:
-        REPORT_EMAIL: ${{ secrets.REPORT_EMAIL }}
-        REPORT_PASS: ${{ secrets.REPORT_PASS }}
-    
-    - name: Run Tests via MCP Server
-      run: |
-        response=$(curl -s -X POST http://localhost:4000/run-tests)
-        echo "Test Results: $response"
-        
-    - name: Send Email Report
-      if: always()
-      run: |
-        curl -X POST http://localhost:4000/send-report \
-          -H "Content-Type: application/json" \
-          -d '{"email":"${{ secrets.REPORT_EMAIL }}"}'
-    
-    - name: Upload Test Results
-      uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: test-results
-        path: test-results/
-        retention-days: 30
+      # 1. Checkout repo
+      - uses: actions/checkout@v4
+
+      # 2. Setup Node.js
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # 4. Install Playwright browsers
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      # 5. Run Playwright tests with HTML report
+      - name: Run Playwright tests
+        run: npx playwright test --reporter=html
+
+      # 6. Zip report (so we can attach it in email)
+      - name: Zip Playwright report
+        if: always()
+        run: zip -r playwright-report.zip playwright-report/
+
+      # 7. Send Email Report (only if secrets are set)
+      - name: Send Email Report
+        if: always()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: 'Saad'
+          password: 1234
+          subject: "Password Generator Test Results"
+          to: muhammadsaadd8855@gmail.com
+          from: muhammadsaadd8855@gmail.com
+          body: |
+            Hello QA Team,
+
+            Your Playwright automation tests have completed successfully.
+
+            📦 Repository: ${{ github.repository }}
+            🌿 Branch: ${{ github.ref_name }}
+            🧩 Commit: ${{ github.sha }}
+
+            The Playwright HTML test report is attached.
+          attachments: playwright-report.zip
+
+      # 8. Upload artifact to GitHub (for backup)
+      - name: Upload Playwright HTML Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
