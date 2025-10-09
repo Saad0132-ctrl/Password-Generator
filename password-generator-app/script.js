@@ -22,10 +22,10 @@ function generatePassword() {
     if (includeNumbers) charset += '0123456789';
     if (includeSymbols) charset += '!@#$%^&*()_+-=[]{}|;:,.<>?';
     
-    if (charset === '') {
-        alert('Please select at least one character type!');
-        return;
-    }
+    // if (charset === '') {
+    //     alert('Please select at least one character type!');
+    //     return;
+    // }
     
     let password = '';
     for (let i = 0; i < length; i++) {
