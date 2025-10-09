@@ -30,4 +30,4 @@ curl -X POST http://localhost:4000/send-report -H "Content-Type: application/jso
 ```
 
 ## Workflow
-- Push code → GitHub Action → MCP Server → Playwright tests → Email/Slack notification
+- Push code → GitHub Action → MCP Server → Playwright tests → Email/Slack notifications
