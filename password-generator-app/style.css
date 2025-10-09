@@ -1,0 +1,98 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 400px;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 2rem;
+}
+
+.password-container {
+    display: flex;
+    margin-bottom: 2rem;
+}
+
+#password {
+    flex: 1;
+    padding: 1rem;
+    border: 2px solid #ddd;
+    border-radius: 5px 0 0 5px;
+    font-size: 1rem;
+    background: #f9f9f9;
+}
+
+#copy-btn {
+    padding: 1rem 1.5rem;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+#copy-btn:hover {
+    background: #5a6fd8;
+}
+
+.settings {
+    margin-bottom: 2rem;
+}
+
+.setting {
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.setting label {
+    color: #333;
+    font-weight: 500;
+}
+
+#length {
+    width: 100%;
+    margin: 0.5rem 0;
+}
+
+#generate-btn {
+    width: 100%;
+    padding: 1rem;
+    background: #764ba2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#generate-btn:hover {
+    background: #6a4190;
+}
+
+.copy-success {
+    background: #4CAF50 !important;
+}
