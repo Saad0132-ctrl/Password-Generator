@@ -54,5 +54,7 @@ function copyPassword() {
     }, 2000);
 }
 
-// Generate initial password
-generatePassword();
+// Generate initial password on page load
+window.addEventListener('DOMContentLoaded', function() {
+    generatePassword();
+});
