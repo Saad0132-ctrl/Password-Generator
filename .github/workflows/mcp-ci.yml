@@ -1,10 +1,8 @@
-name: Password Generator Tests
+name: MCP Test Automation
 
 on:
   push:
     branches: [ "main", "develop" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
   test:
@@ -19,11 +17,30 @@ jobs:
       run: npm ci
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
-    - name: Run Playwright tests
-      run: npx playwright test
+    
+    - name: Start MCP Server
+      run: |
+        node mcp-server/server.js &
+        sleep 3
+      env:
+        REPORT_EMAIL: ${{ secrets.REPORT_EMAIL }}
+        REPORT_PASS: ${{ secrets.REPORT_PASS }}
+    
+    - name: Run Tests via MCP Server
+      run: |
+        curl -X POST http://localhost:4000/run-tests
+        
+    - name: Send Email Report
+      run: |
+        curl -X POST http://localhost:4000/send-report \
+          -H "Content-Type: application/json" \
+          -d '{"email":"${{ secrets.REPORT_EMAIL }}"}'
+    
     - uses: actions/upload-artifact@v4
       if: always()
       with:
         name: playwright-report
-        path: playwright-report/
+        path: |
+          playwright-report/
+          test-results/
         retention-days: 30
