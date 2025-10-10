@@ -39,16 +39,16 @@ jobs:
 
       # 7. Send Email Report (only if secrets are set)
       - name: Send Email Report
-        if: always() && secrets.GMAIL_USERNAME && secrets.GMAIL_APP_PASSWORD
+        if: always() && vars.GMAIL_USERNAME && vars.GMAIL_APP_PASSWORD
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
           server_port: 587
-          username: ${{ secrets.GMAIL_USERNAME }}
-          password: ${{ secrets.GMAIL_APP_PASSWORD }}
+          username: ${{ vars.GMAIL_USERNAME }}
+          password: ${{ vars.GMAIL_APP_PASSWORD }}
           subject: "Password Generator Test Results"
           to: minos73702@aupvs.com
-          from: ${{ secrets.GMAIL_USERNAME }}
+          from: ${{ vars.GMAIL_USERNAME }}
           body: |
             Hello QA Team,
 
