@@ -45,9 +45,8 @@ jobs:
           server_address: smtp.gmail.com
           server_port: 587
           username: 'Saad'
-          password: 1234
           subject: "Password Generator Test Results"
-          to: muhammadsaadd8855@gmail.com
+          to: minos73702@aupvs.com
           from: muhammadsaadd8855@gmail.com
           body: |
             Hello QA Team,
